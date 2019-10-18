@@ -60,7 +60,6 @@ public class Problem6 {
     @Test(dataProvider = "getProductNames")
     public void verifySortOnWoodlandWebsite(String productName) {
         driver.get(Environment.getValue("woodland.url"));
-        System.out.println(productName);
         WLHomePage homePage = new WLHomePage(driver);
         WLSearchPage searchPage = homePage.searchProduct(productName);
         searchPage.waitTillResultsDisplayed();
