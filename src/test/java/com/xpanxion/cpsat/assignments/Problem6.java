@@ -21,9 +21,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/*
+6) Open in chrome browser https://www.woodlandworldwide.com/, now search for the items related to the
+below-given product names.
+    1. Test1: Use the product name “Bags”
+    2. Test2: Use product name “Shoes” and
+    3. Test3: Use the product name “Tshirts”.
+    4. These product names are to be saved in an Excel file, read the product names from this file
+    and pass to the search box.
+    5. Select the filter ‘High to Low’ and test whether the first 8 products are in descending order
+    of the price.
+    6. Write a script for Google chrome in TestNG using WebDriver.
+ */
 public class Problem6 {
     private WebDriver driver;
 
+    //Dataprovider to get product names from excel sheet
     @DataProvider(name = "getProductNames")
     public static Object[][] getProductNames() throws IOException {
         FileInputStream fileInputStream = new FileInputStream("src//test//resources//Woodland_TestData.xlsx");
@@ -59,11 +72,18 @@ public class Problem6 {
 
     @Test(dataProvider = "getProductNames")
     public void verifySortOnWoodlandWebsite(String productName) {
+        //Open in chrome browser https://www.woodlandworldwide.com/
         driver.get(Environment.getValue("woodland.url"));
+
+        //Search the product
         WLHomePage homePage = new WLHomePage(driver);
         WLSearchPage searchPage = homePage.searchProduct(productName);
         searchPage.waitTillResultsDisplayed();
+
+        //Select the filter ‘High to Low’
         searchPage.applyHighToLowFilter();
+
+        //test whether the first 8 products are in descending order of the price.
         ArrayList<Integer> actualList = searchPage.getPriceOfFirstEightProducts();
         ArrayList<Integer> expectedList = new ArrayList<>(actualList);
         Collections.sort(expectedList);
